@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0D5C52">
+<title>فكّها — خطة سداد الديون</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F4F1;--card:#fff;--ink:#13221E;--ink2:#5A6A64;--line:#DCE2DE;--brand:#0D5C52;--on-brand:#fff;--brand-soft:#DCEDE9;--gold:#9A6700;--gold-soft:#FBEFD2;--red:#B73A25;--red-soft:#F9E0DA;--field:#F7F9F7}
+@media(prefers-color-scheme:dark){:root{--bg:#0F1815;--card:#17231F;--ink:#E8EFEC;--ink2:#9DB0A9;--line:#283832;--brand:#5CC4B3;--on-brand:#0F1815;--brand-soft:#1B3A34;--gold:#E3A93A;--gold-soft:#3A2F12;--red:#EE8A75;--red-soft:#3D1E18;--field:#1D2B26}}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px}
+header{padding:20px 0 8px;display:flex;align-items:baseline;justify-content:space-between}
+header h1{font-size:22px;font-weight:600;color:var(--brand)}
+header span{font-size:13px;color:var(--ink2)}
+section[hidden]{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.hero{padding:18px 16px 14px}
+.hero small{font-size:13px;color:var(--ink2)}
+.hero .date{font-size:34px;font-weight:600;line-height:1.25;color:var(--brand);margin:2px 0}
+.hero .sub{font-size:15px;color:var(--ink2)}
+.chart text{font-family:inherit;font-size:11px;fill:var(--ink2)}
+.chart .base{stroke:var(--line);stroke-width:1}
+.chart .sel{stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3}
+input,select,button{font-family:inherit;font-size:16px;color:var(--ink)}
+input[type=text],input[type=number],select{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--field);padding:0 10px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--brand);height:32px}
+.row{display:flex;align-items:center;gap:10px}
+.lbl{font-size:13px;color:var(--ink2);display:block;margin-bottom:4px}
+.btn{height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;padding:0 14px;cursor:pointer;font-weight:500}
+.btn.primary{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.btn.full{width:100%}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{min-height:56px;border:1px solid var(--line);background:var(--card);border-radius:12px;cursor:pointer;line-height:1.4;padding:6px}
+.seg button small{display:block;font-size:12px;color:var(--ink2)}
+.seg button.on{border:2px solid var(--brand);background:var(--brand-soft);color:var(--brand)}
+.seg button.on small{color:var(--brand)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat small{font-size:12px;color:var(--ink2);display:block}
+.stat b{font-size:19px;font-weight:600}
+.stat.good{background:var(--brand-soft);border-color:transparent}
+.stat.good b,.stat.good small{color:var(--brand)}
+.ord{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.ord:first-child{border-top:0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:8px}
+.muted{color:var(--ink2);font-size:14px}
+h2{font-size:17px;font-weight:600;margin:6px 0 10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.chip{font-size:12px;font-weight:500;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.chip.red{background:var(--red-soft);color:var(--red)}
+.chip.gold{background:var(--gold-soft);color:var(--gold)}
+.chip.calm{background:var(--brand-soft);color:var(--brand)}
+.alert{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.alert .when{font-size:13px;color:var(--ink2)}
+.empty{text-align:center;padding:28px 12px}
+.empty h2{margin-bottom:4px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav div{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav button{background:none;border:0;height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;color:var(--ink2);cursor:pointer;position:relative}
+nav button.on{color:var(--brand);font-weight:600}
+nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav .badge{position:absolute;top:8px;right:calc(50% - 20px);background:var(--red);color:#fff;border-radius:99px;font-size:11px;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px}
+nav .badge[hidden]{display:none}
+@media(prefers-reduced-motion:no-preference){.hero .date{transition:opacity .2s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>فكّها</h1><span>خطة سداد ديونك</span></header>
+
+<section id="t-plan">
+  <div id="empty" class="card empty" hidden>
+    <h2>ابدأ بأول دين</h2>
+    <p class="muted" style="margin-bottom:12px">ضيف كارت أو قسط أو سلفة وهنحسب لك خطة السداد.</p>
+    <button class="btn primary" data-go="debts">إضافة دين</button>
+  </div>
+  <div id="planBody">
+    <div class="card hero">
+      <small>هتتحرر من ديونك في</small>
+      <div class="date" id="hDate"></div>
+      <div class="sub" id="hSub"></div>
+      <svg id="chart" class="chart" viewBox="0 0 340 176" width="100%" role="img" aria-label="رسم يوضح نزول إجمالي الديون شهر بعد شهر" style="margin-top:12px;direction:ltr"></svg>
+      <input type="range" id="scrub" min="0" max="0" value="0" aria-label="اختار شهر عشان تشوف المتبقي">
+      <div id="scrubOut" class="muted" style="margin-top:2px"></div>
+    </div>
+
+    <h2>طريقة السداد</h2>
+    <div class="seg" style="margin-bottom:14px">
+      <button id="s1">الأعلى فايدة أولًا<small>توفير أكبر في الفوايد</small></button>
+      <button id="s2">الأصغر مبلغًا أولًا<small>إنجاز أسرع وتحفيز</small></button>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><span class="lbl" style="margin:0">مبلغ إضافي كل شهر</span><b id="extraOut"></b></div>
+      <input type="range" id="extra" min="0" max="10000" step="100" value="500" aria-label="مبلغ إضافي شهريًا">
+    </div>
+
+    <div class="stats">
+      <div class="stat"><small>هتدفع كل شهر</small><b id="k1"></b></div>
+      <div class="stat"><small>إجمالي الفوايد</small><b id="k2"></b></div>
+      <div class="stat good"><small>توفير في الفوايد</small><b id="k3"></b></div>
+      <div class="stat good"><small>بدري بقد إيه</small><b id="k4"></b></div>
+    </div>
+    <p id="baseNote" class="muted" style="margin-bottom:14px"></p>
+
+    <h2>ترتيب السداد</h2>
+    <div class="card" id="order"></div>
+  </div>
+</section>
+
+<section id="t-debts" hidden>
+  <h2>ديونك</h2>
+  <div id="debtList"></div>
+  <button class="btn primary full" id="add">إضافة دين</button>
+</section>
+
+<section id="t-alerts" hidden>
+  <h2>مواعيد السداد</h2>
+  <div id="alertList"></div>
+  <div class="card">
+    <label class="lbl" for="remind">نبهني قبل الموعد بـ</label>
+    <select id="remind">
+      <option value="1">يوم</option>
+      <option value="3">3 أيام</option>
+      <option value="5">5 أيام</option>
+      <option value="7">أسبوع</option>
+    </select>
+    <button class="btn full" id="notif" style="margin-top:10px"></button>
+    <p class="muted" id="notifNote" style="margin-top:8px;font-size:13px"></p>
+  </div>
+</section>
+</div>
+
+<nav aria-label="التنقل"><div>
+  <button data-go="plan" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>الخطة</button>
+  <button data-go="debts"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h3"/></svg>الديون</button>
+  <button data-go="alerts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4zM10 21h4"/></svg>التنبيهات<span class="badge" id="badge" hidden></span></button>
+</div></nav>
+
+<script>
+var COLORS=['#1B8577','#D49A1F','#D2553D','#5B78B8','#9A64A0','#7FA03C'];
+var KEY='fakkaha.v1';
+var S={debts:[{id:1,n:'كارت ائتمان 1',b:25000,r:36,m:1500,d:5},{id:2,n:'كارت ائتمان 2',b:12000,r:30,m:800,d:18},{id:3,n:'قسط / سلفة',b:40000,r:12,m:2200,d:27}],strat:1,extra:500,remind:3,notif:false,notified:{},nextId:4};
+try{var saved=JSON.parse(localStorage.getItem(KEY));if(saved&&saved.debts)S=saved;}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function fmt(n){return Math.round(n).toLocaleString('en-US');}
+function dur(m){if(m>=600)return 'أكتر من 50 سنة';var y=Math.floor(m/12),r=m%12,p=[];if(y>0)p.push(y+(y===1?' سنة':' سنين'));if(r>0)p.push(r+' شهر');return p.length?p.join(' و '):'أقل من شهر';}
+function monthName(offset){var t=new Date();var d=new Date(t.getFullYear(),t.getMonth()+offset,1);return d.toLocaleDateString('ar-EG-u-nu-latn',{month:'long',year:'numeric'});}
+
+function sim(list,extra,st,roll){
+  var d=list.map(function(x,i){var b=Math.max(+x.b||0,0);return{i:i,n:x.n,b:b,b0:b,r:(+x.r||0)/1200,m:+x.m||0,done:b>0?null:0};});
+  var budget=d.reduce(function(s,x){return s+(x.b0>0?x.m:0);},0)+extra,interest=0,month=0;
+  var hist=[d.map(function(x){return x.b;})];
+  function open(){return d.some(function(x){return x.b>0.005;});}
+  while(open()&&month<600){
+    month++;
+    d.forEach(function(x){if(x.b>0){var i=x.b*x.r;x.b+=i;interest+=i;}});
+    var pool=roll?budget:0;
+    d.forEach(function(x){if(x.b>0){var p=Math.min(x.m,x.b);x.b-=p;if(roll)pool-=p;}});
+    if(roll){
+      var act=d.filter(function(x){return x.b>0.005;});
+      act.sort(function(a,b){return st===1?(b.r-a.r):(a.b-b.b);});
+      act.forEach(function(x){var p=Math.min(Math.max(pool,0),x.b);x.b-=p;pool-=p;});
+    }
+    d.forEach(function(x){if(x.done===null&&x.b<=0.005){x.done=month;x.b=0;}});
+    hist.push(d.map(function(x){return Math.max(x.b,0);}));
+  }
+  var order=d.filter(function(x){return x.b0>0;}).map(function(x){return{i:x.i,n:x.n,m:x.done};}).sort(function(a,b){return (a.m===null?9999:a.m)-(b.m===null?9999:b.m);});
+  return{months:month,interest:interest,order:order,hist:hist,budget:budget};
+}
+
+function chartSVG(plan,sel){
+  var W=340,H=176,pr=6,pl=6,pt=8,pb=24,months=plan.months;
+  var n=Math.min(months+1,36),idx=[],i,k;
+  for(i=0;i<n;i++)idx.push(n===1?0:Math.round(i*months/(n-1)));
+  var total0=plan.hist[0].reduce(function(a,b){return a+b;},0)||1;
+  var sc=(H-pt-pb)/total0,step=(W-pl-pr)/n,bw=step*0.72,base=H-pb,out='';
+  for(i=0;i<n;i++){
+    var x=W-pr-(i+1)*step+(step-bw)/2,y=base,row=plan.hist[idx[i]];
+    for(k=0;k<row.length;k++){
+      var h=row[k]*sc;if(h<=0)continue;y-=h;
+      out+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+COLORS[k%COLORS.length]+'" rx="1.5"/>';
+    }
+  }
+  out+='<line class="base" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+base+'" y2="'+base+'"/>';
+  var pos=months>0?sel/months*(n-1):0,cx=W-pr-(pos+0.5)*step;
+  out+='<line class="sel" x1="'+cx.toFixed(1)+'" x2="'+cx.toFixed(1)+'" y1="'+(pt-2)+'" y2="'+base+'"/>';
+  out+='<text x="'+(W-pr)+'" y="'+(H-6)+'" text-anchor="end">اليوم</text>';
+  out+='<text x="'+pl+'" y="'+(H-6)+'" text-anchor="start">'+monthName(months)+'</text>';
+  return out;
+}
+
+var plan=null;
+function calc(){
+  var list=S.debts.filter(function(x){return (+x.b||0)>0;});
+  var has=list.length>0;
+  $('empty').hidden=has;$('planBody').hidden=!has;
+  if(!has)return;
+  plan=sim(S.debts,S.extra,S.strat,true);
+  var base=sim(S.debts,0,S.strat,false);
+  var capped=plan.months>=600,baseCap=base.months>=600;
+  $('extraOut').textContent=fmt(S.extra)+' ج';
+  $('hDate').textContent=capped?'الخطة دي مش كفاية':monthName(plan.months);
+  $('hSub').textContent=capped?'زوّد المبلغ الإضافي أو الحد الأدنى عشان الدين يبدأ ينزل.':'بعد '+dur(plan.months);
+  $('k1').textContent=fmt(plan.budget)+' ج';
+  $('k2').textContent=capped?'—':fmt(plan.interest)+' ج';
+  $('k3').textContent=(capped||baseCap)?'—':fmt(Math.max(base.interest-plan.interest,0))+' ج';
+  $('k4').textContent=(capped||baseCap)?'—':dur(Math.max(base.months-plan.months,0));
+  $('baseNote').textContent=baseCap?'لو دفعت الحد الأدنى بس، مش هتخلص من ديونك في مدة معقولة.':'لو دفعت الحد الأدنى بس: '+dur(base.months)+' وفوايد '+fmt(base.interest)+' ج.';
+  var sc=$('scrub');sc.max=plan.months;if(+sc.value>plan.months)sc.value=plan.months;
+  drawScrub();
+  $('s1').className=S.strat===1?'on':'';$('s2').className=S.strat===2?'on':'';
+  var o='';
+  plan.order.forEach(function(x){o+='<div class="ord"><span><span class="dot" style="background:'+COLORS[x.i%COLORS.length]+'"></span>'+esc(x.n)+'</span><span class="muted">'+(x.m!==null?'بعد '+dur(x.m):'مش هيخلص')+'</span></div>';});
+  $('order').innerHTML=o;
+}
+function drawScrub(){
+  if(!plan)return;
+  var m=+$('scrub').value;
+  $('chart').innerHTML=chartSVG(plan,m);
+  var left=plan.hist[Math.min(m,plan.hist.length-1)].reduce(function(a,b){return a+b;},0);
+  $('scrubOut').textContent=(m===0?'النهارده':'بعد '+dur(m)+' ('+monthName(m)+')')+': باقي عليك '+fmt(left)+' ج';
+}
+
+function debtCard(x,i){
+  return '<div class="card" data-id="'+x.id+'"><div class="row" style="margin-bottom:10px"><span class="dot" style="background:'+COLORS[i%COLORS.length]+';margin:0"></span>'+
+  '<input type="text" data-k="n" value="'+esc(x.n)+'" aria-label="اسم الدين"><button class="btn" data-del="'+x.id+'" aria-label="حذف الدين" style="padding:0 12px">حذف</button></div>'+
+  '<div class="grid3"><div><label class="lbl">المبلغ</label><input type="number" inputmode="decimal" min="0" data-k="b" value="'+x.b+'"></div>'+
+  '<div><label class="lbl">الفايدة %</label><input type="number" inputmode="decimal" min="0" data-k="r" value="'+x.r+'"></div>'+
+  '<div><label class="lbl">الحد الأدنى</label><input type="number" inputmode="decimal" min="0" data-k="m" value="'+x.m+'"></div></div>'+
+  '<div style="margin-top:10px"><label class="lbl">يوم الاستحقاق من الشهر (1 إلى 31)</label><input type="number" inputmode="numeric" min="1" max="31" data-k="d" value="'+x.d+'"></div></div>';
+}
+function renderDebts(){
+  $('debtList').innerHTML=S.debts.length?S.debts.map(debtCard).join(''):'<div class="card empty"><h2>مفيش ديون لسه</h2><p class="muted">ضيف أول دين عشان تبدأ.</p></div>';
+}
+
+function today0(){var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate());}
+function nextDue(day){
+  var t=today0(),y=t.getFullYear(),m=t.getMonth();
+  var dt=new Date(y,m,Math.min(day,new Date(y,m+1,0).getDate()));
+  if(dt<t)dt=new Date(y,m+1,Math.min(day,new Date(y,m+2,0).getDate()));
+  return dt;
+}
+function daysLeft(dt){return Math.round((dt-today0())/864e5);}
+function when(n){return n===0?'النهارده':n===1?'بكرة':'بعد '+n+' يوم';}
+function pad(n){return (n<10?'0':'')+n;}
+function ymd(d){return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());}
+
+function renderAlerts(){
+  var items=S.debts.filter(function(x){return (+x.b||0)>0;}).map(function(x){var dt=nextDue(+x.d||1);return{x:x,dt:dt,n:daysLeft(dt)};}).sort(function(a,b){return a.n-b.n;});
+  var h='',soon=0;
+  items.forEach(function(it){
+    var cls=it.n<=1?'red':it.n<=S.remind?'gold':'calm';
+    if(it.n<=S.remind)soon++;
+    h+='<div class="card alert"><div><b>'+esc(it.x.n)+'</b><div class="when">الحد الأدنى '+fmt(it.x.m)+' ج · '+it.dt.toLocaleDateString('ar-EG-u-nu-latn',{day:'numeric',month:'long'})+'</div></div>'+
+    '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="chip '+cls+'">'+when(it.n)+'</span><button class="btn" style="height:34px;font-size:13px;padding:0 10px" data-ics="'+it.x.id+'">أضف للتقويم</button></div></div>';
+  });
+  $('alertList').innerHTML=h||'<div class="card empty"><h2>مفيش مواعيد</h2><p class="muted">ضيف ديون عشان نفكرك بمواعيدها.</p></div>';
+  var b=$('badge');b.hidden=soon===0;b.textContent=soon;
+  $('remind').value=String(S.remind);
+  var supported='Notification' in window,perm=supported?Notification.permission:'denied';
+  $('notif').textContent=perm==='granted'?'التنبيهات شغالة':'فعّل التنبيهات';
+  $('notif').className='btn full'+(perm==='granted'?'':' primary');
+  $('notifNote').textContent=!supported?'المتصفح ده مش بيدعم التنبيهات. استخدم "أضف للتقويم".':perm==='denied'?'التنبيهات مقفولة من إعدادات المتصفح.':'التنبيه بيظهر لما تفتح التطبيق. للتنبيه وهو مقفول، أضف المواعيد للتقويم.';
+}
+
+function checkDue(){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  S.debts.forEach(function(x){
+    if(!((+x.b||0)>0))return;
+    var dt=nextDue(+x.d||1),n=daysLeft(dt);
+    var key=x.id+'-'+ymd(dt);
+    if(n<=S.remind&&!S.notified[key]){
+      try{new Notification('موعد سداد قريب',{body:x.n+': الحد الأدنى '+fmt(x.m)+' ج '+when(n)});S.notified[key]=1;}catch(e){}
+    }
+  });
+  save();
+}
+
+function downloadICS(x){
+  var dt=nextDue(+x.d||1),day=+x.d||1;
+  var rule=day>28?'FREQ=MONTHLY;BYMONTHDAY=-1':'FREQ=MONTHLY;BYMONTHDAY='+day;
+  var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Fakkaha//AR','BEGIN:VEVENT','UID:fakkaha-'+x.id+'@local','DTSTAMP:'+ymd(new Date())+'T000000Z','DTSTART;VALUE=DATE:'+ymd(dt),'RRULE:'+rule,'SUMMARY:سداد '+x.n,'DESCRIPTION:الحد الأدنى '+x.m+' ج','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:موعد سداد '+x.n,'TRIGGER:-P'+S.remind+'D','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'}));
+  a.download='fakkaha-'+x.id+'.ics';document.body.appendChild(a);a.click();a.remove();
+}
+
+function go(tab){
+  ['plan','debts','alerts'].forEach(function(t){$('t-'+t).hidden=t!==tab;});
+  document.querySelectorAll('nav button').forEach(function(b){b.className=b.dataset.go===tab?'on':'';});
+  if(tab==='alerts')renderAlerts();
+  if(tab==='plan')calc();
+  window.scrollTo(0,0);
+}
+
+document.addEventListener('click',function(e){
+  var g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return;}
+  var del=e.target.closest('[data-del]');
+  if(del){S.debts=S.debts.filter(function(x){return String(x.id)!==del.dataset.del;});save();renderDebts();renderAlerts();return;}
+  var ics=e.target.closest('[data-ics]');
+  if(ics){var x=S.debts.filter(function(y){return String(y.id)===ics.dataset.ics;})[0];if(x)downloadICS(x);}
+});
+$('debtList').addEventListener('input',function(e){
+  var t=e.target,card=t.closest('[data-id]');if(!card||!t.dataset.k)return;
+  var x=S.debts.filter(function(y){return String(y.id)===card.dataset.id;})[0];if(!x)return;
+  var k=t.dataset.k;
+  x[k]=k==='n'?t.value:Math.max(+t.value||0,0);
+  if(k==='d')x.d=Math.min(Math.max(Math.round(x.d)||1,1),31);
+  save();renderAlerts();
+});
+$('add').onclick=function(){S.debts.push({id:S.nextId++,n:'دين جديد',b:10000,r:20,m:500,d:10});save();renderDebts();renderAlerts();var l=$('debtList').lastElementChild;if(l)l.scrollIntoView({block:'center'});};
+$('s1').onclick=function(){S.strat=1;save();calc();};
+$('s2').onclick=function(){S.strat=2;save();calc();};
+$('extra').oninput=function(){S.extra=+this.value;save();calc();};
+$('scrub').oninput=drawScrub;
+$('remind').onchange=function(){S.remind=+this.value;save();renderAlerts();checkDue();};
+$('notif').onclick=function(){
+  if(!('Notification' in window))return;
+  Notification.requestPermission().then(function(p){S.notif=p==='granted';save();renderAlerts();checkDue();});
+};
+
+$('extra').value=S.extra;
+renderDebts();renderAlerts();calc();checkDue();
+setInterval(checkDue,36e5);
+</script>
+</body>
+</html>
